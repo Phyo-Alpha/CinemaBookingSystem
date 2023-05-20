@@ -1,6 +1,6 @@
+from typing import Any
 from django.contrib import admin
 from .models import User, UserProfile
-from main.models import Ticket
 
 #   DO NOT REPLACE THE FOLLOWING!
 class UserProfileAdmin(admin.ModelAdmin):
@@ -31,5 +31,10 @@ class UserAdmin(admin.ModelAdmin):
     display_suspension_status.short_description = 'Status'
     display_suspension_status.admin_order_field = 'is_active'
 
-admin.site.register(User, UserAdmin)
+class CustomUserAdmin(UserAdmin):
+    def save_model(self, request: Any, obj: Any, form: Any, change: Any) -> None:
+        obj.set_password(form.cleaned_data['password'])
+        super().save_model(request, obj, form, change)
+
+admin.site.register(User, CustomUserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)

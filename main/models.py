@@ -79,16 +79,16 @@ class RatingAndReview(models.Model):
     def __str__(self): 
         return f'{self.user_id.username}, {self.rating}' 
      
-class MovieSession(models.Model): 
-    session_id = models.AutoField(primary_key=True, auto_created=True, null=False) 
-    movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE) 
-    room_id = models.ForeignKey(CinemaRoom, on_delete=models.CASCADE) 
-    start_time = models.DateTimeField(default=datetime.now())
+# class MovieSession(models.Model): 
+#     session_id = models.AutoField(primary_key=True, auto_created=True, null=False) 
+#     movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE) 
+#     room_id = models.ForeignKey(CinemaRoom, on_delete=models.CASCADE) 
+#     start_time = models.DateTimeField(default=datetime.now())
  
-    def __str__(self): 
-        return f'{self.room_name}'
+#     def __str__(self): 
+#         return f'{self.room_name}'
     
-class MovieSession(models.Model):
+class MovieSession(models.Model):   
     session_id = models.AutoField(primary_key=True)
     movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE)
     room_id = models.ForeignKey(CinemaRoom, on_delete=models.CASCADE)
