@@ -103,6 +103,7 @@ def food_and_drinks_delete(request, pk):
     food_and_drinks = FoodAndDrinks.objects.get(combo_id=pk)
     try:
         food_and_drinks.delete()
+        messages.success(request, 'Food and Drink deleted successfully')
     except:
         pass
     return redirect('food_and_drinks_list')
@@ -179,6 +180,7 @@ def movie_session_delete(request, pk):
     movie_session = MovieSession.objects.get(session_id=pk)
     try:
         movie_session.delete()
+        messages.success(request, 'Movie Session deleted successfully')
     except:
         pass
     return redirect('movie_session_list')
@@ -215,6 +217,7 @@ def seat_delete(request, pk):
     seat = Seat.objects.get(seat_id=pk)
     try:
         seat.delete()
+        messages.success(request, 'Seat deleted successfully')
     except:
         pass
     return redirect('seat_list')
@@ -240,6 +243,3 @@ def report_page(request):
         form = ReportForm()
     return render(request, 'report_page.html', {'form': form})
     
-
-
-
