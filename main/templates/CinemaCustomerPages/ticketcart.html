@@ -545,6 +545,11 @@ Customer View Template
 
         if (loyalty_points < 5) {
             RedeemHeader.innerHTML = "You don't have enough points to redeem discount";
+            const nodiscount = document.createElement("button")
+            nodiscount.classList.add("discount", "btn");
+            nodiscount.innerHTML = "Go back";
+            nodiscount.setAttribute("data-discount", "0");
+            document.querySelector(".checkoutBtns").appendChild(nodiscount);
         }
 
         if (loyalty_points >= 5) {
