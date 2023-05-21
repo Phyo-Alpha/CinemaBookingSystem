@@ -1,11 +1,11 @@
 # CinemaBookingSystem, steps to run the project
 
 # make sure python is installed on computer, and python 'Path'is set in user environment variables
-# open the cmd, change the directory to the project directory where the manage.py is in, example below
-cd C:\Users\User\Desktop\csit314\CinemaBookingSystem
+# open the command prompt, change the directory to the project directory where the manage.py is in, example below
+cd C:\Users\User\Documents\CinemaBookingSystem-master
 
 # optional --> create a virtual environment, 'myenv' is the name of the environment
-py -m venv myenv
+python -m venv myenv
 
 # optional --> run the virtual environment
 myenv\scripts\activate
@@ -31,3 +31,22 @@ pip install Pillow
 
 # Once done run the web application
 python manage.py runserver
+
+# Open a web browser and go to the following address
+http://127.0.0.1:8000/
+
+# admin login details:
+admin1
+cinema123
+
+# manager login details:
+manager1
+cinema123
+
+# staff login details:
+staff1
+cinema123
+
+# customer login details:
+customer1
+cinema123
