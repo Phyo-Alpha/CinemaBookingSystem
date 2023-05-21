@@ -38,7 +38,7 @@ def mainPage(response):
     if CinemaRoom.objects.count() == 0:
         cr = CinemaRoom.objects.create(room_name="Room 1")
         cr.save()
-           
+         
     movies = Movie.objects.all()
     
     for movie in movies:    
@@ -129,7 +129,9 @@ def addtoCart(request):
 def ticketcart(request):
     data = request.session.get("cart")
     tickets = json.loads(json.dumps(data)) if data else [] 
-    print(tickets)
+    
+    customer = Customer.objects.get(user = request.user)
+    customer_points = customer.loyalty_points
     
     if not tickets:
         messages.error(request, "Your cart is empty")
@@ -140,7 +142,7 @@ def ticketcart(request):
     
     foodcombo = FoodAndDrinks.objects.all().values()
     foodcombo_json = json.dumps(list(foodcombo))
-    context = {"tickets": json.dumps(tickets), "foodcombo": foodcombo_json}
+    context = {"tickets": json.dumps(tickets), "foodcombo": foodcombo_json, "loyalty_points": customer_points}
     return render(request, "CinemaCustomerPages/ticketcart.html", context)
 
 @csrf_exempt
@@ -162,9 +164,11 @@ def checkOutCart(request):
     
     data = request.session.get("checkout")
     data_json = json.loads(json.dumps(data)) if data else []
-    print(data_json)
     
     room_id = data_json["tickets"]["session"]["room"]["room_id"]
+    
+    customer = Customer.objects.get(user = request.user)
+    customer.set_points(data_json["loyalty_points"])
       
     for seat in data_json["tickets"]["seats"]:
         print(int(seat["seat"])+1)
@@ -193,6 +197,9 @@ def checkOutCart(request):
                                                combo_id = combo, user_id = request.user, ticket_type = ticketType, 
                                                cost = float(ticket_price), is_paid = True)
                 ticket.save()
+                
+                
+                customer.add_points(5)
     
     del request.session["cart"]
     request.session.modified = True

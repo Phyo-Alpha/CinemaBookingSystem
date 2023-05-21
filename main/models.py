@@ -16,6 +16,14 @@ class Customer(models.Model):
     def __str__(self):
         return f'{self.user.username} profile'
     
+    def add_points(self, points):
+        self.loyalty_points += points
+        self.save()
+    
+    def set_points (self, points):
+        self.loyalty_points = points
+        self.save()
+    
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 

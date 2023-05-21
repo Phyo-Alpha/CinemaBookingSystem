@@ -69,7 +69,10 @@ Customer View Template
 
     // this stores ticket data from movie_seat selection
     let ticketsJSON = {{ tickets | safe}};
-
+    
+    // this is the current customer loyalty points 
+    let loyalty_points = {{ loyalty_points | safe}};
+    
     // get the previous tickets data user added to the cart
     let tickets = localStorage.getItem("tickets");
 
@@ -537,29 +540,40 @@ Customer View Template
         const RedeemHeader = document.createElement("h3");
         RedeemHeader.innerHTML = "Redeem Discount";
 
-        const discount5 = document.createElement("button")
-        discount5.classList.add("discount", "btn");
-        discount5.innerHTML = "5% discount (5 points)";
-        discount5.setAttribute("data-discount", "5");
-
-        const discount10 = document.createElement("button")
-        discount10.classList.add("discount", "btn");
-        discount10.innerHTML = "10% discount (10 points)";
-        discount10.setAttribute("data-discount", "10");
-
-        const discount20 = document.createElement("button")
-        discount20.classList.add("discount", "btn");
-        discount20.innerHTML = "20% discount (20 points)";
-        discount20.setAttribute("data-discount", "20");
-
         document.querySelector(".checkoutBtns").innerHTML = "";
         document.querySelector(".checkoutBtns").appendChild(RedeemHeader);
-        document.querySelector(".checkoutBtns").appendChild(discount5);
-        document.querySelector(".checkoutBtns").appendChild(discount10);
-        document.querySelector(".checkoutBtns").appendChild(discount20);
 
+        if (loyalty_points < 5) {
+            RedeemHeader.innerHTML = "You don't have enough points to redeem discount";
+        }
+
+        if (loyalty_points >= 5) {
+            const discount5 = document.createElement("button")
+            discount5.classList.add("discount", "btn");
+            discount5.innerHTML = "5% discount (5 points)";
+            discount5.setAttribute("data-discount", "5");
+            document.querySelector(".checkoutBtns").appendChild(discount5);
+        }
+
+        if (loyalty_points >= 10){
+            const discount10 = document.createElement("button")
+            discount10.classList.add("discount", "btn");
+            discount10.innerHTML = "10% discount (10 points)";
+            discount10.setAttribute("data-discount", "10");
+            document.querySelector(".checkoutBtns").appendChild(discount10);
+        }
+
+        if (loyalty_points >= 20){
+            const discount20 = document.createElement("button")
+            discount20.classList.add("discount", "btn");
+            discount20.innerHTML = "20% discount (20 points)";
+            discount20.setAttribute("data-discount", "20");
+            document.querySelector(".checkoutBtns").appendChild(discount20);   
+        }
+        
         document.querySelectorAll(".discount").forEach((discount) => {
             discount.addEventListener("click", function () {
+                loyalty_points -= parseInt(discount.dataset.discount);
                 localStorage.setItem("discount", discount.dataset.discount);
                 calculateTotalPrice();
                 document.querySelector(".checkoutBtns").innerHTML = pay_and_Redeem_Btn;
@@ -574,7 +588,8 @@ Customer View Template
 
     function makePayment() {
         const data = {
-            "tickets": tickets
+            "tickets": tickets,
+            "loyalty_points": loyalty_points
         };
 
         fetch("{% url 'checkout' %}", {
